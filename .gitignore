@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 *.log
+
+api/*.js
+api/*.d.ts
+api/*.map
