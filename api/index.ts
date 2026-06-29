@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import type { Express } from "express";
-import { createApp } from "../src/app.js";
+import { createApp } from "../src/createApp.js";
 import { connectDb } from "../src/config/db.js";
 
 let app: Express | undefined;

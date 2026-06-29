@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { createServer } from "node:http";
 import { connectDb } from "../config/db.js";
-import { createApp } from "../app.js";
+import { createApp } from "../createApp.js";
 import { Task } from "../models/Task.js";
 import { User } from "../models/User.js";
 async function seedForTest() {
