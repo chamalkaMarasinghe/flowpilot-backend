@@ -13,7 +13,8 @@ export function createApp() {
 
   app.use(
     helmet({
-      contentSecurityPolicy: env.NODE_ENV === "production",
+      // Swagger UI needs inline scripts/styles; strict CSP breaks /api/docs in production.
+      contentSecurityPolicy: false,
     }),
   );
   app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
@@ -21,6 +22,20 @@ export function createApp() {
 
   app.get("/health", (_req, res) => {
     sendSuccess(res, { ok: true }, "Service healthy");
+  });
+
+  app.get("/", (_req, res) => {
+    sendSuccess(
+      res,
+      {
+        name: "FlowPilot API",
+        version: "1.0.0",
+        docs: `${env.API_BASE_URL}/api/docs`,
+        health: `${env.API_BASE_URL}/health`,
+        api: `${env.API_BASE_URL}/api`,
+      },
+      "FlowPilot API",
+    );
   });
 
   app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

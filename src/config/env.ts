@@ -6,6 +6,18 @@ function requireEnv(key: string, fallback?: string): string {
   return value;
 }
 
+function resolveApiBaseUrl(): string {
+  if (process.env.API_BASE_URL) {
+    return process.env.API_BASE_URL.replace(/\/$/, "");
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return `http://localhost:${process.env.PORT ?? 5000}`;
+}
+
 export const env = {
   PORT: Number(process.env.PORT ?? 5000),
   MONGODB_URI: requireEnv("MONGODB_URI", "mongodb://127.0.0.1:27017/flowpilot"),
@@ -13,4 +25,5 @@ export const env = {
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? "7d",
   CORS_ORIGIN: process.env.CORS_ORIGIN ?? "http://localhost:8080",
   NODE_ENV: process.env.NODE_ENV ?? "development",
+  API_BASE_URL: resolveApiBaseUrl(),
 };

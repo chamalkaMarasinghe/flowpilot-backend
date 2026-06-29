@@ -1,5 +1,13 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import swaggerJsdoc from "swagger-jsdoc";
 import { env } from "./env.js";
+
+const routesDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../routes");
+
+function routeGlob(extension: "ts" | "js"): string {
+  return path.join(routesDir, `*.${extension}`).replace(/\\/g, "/");
+}
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -10,7 +18,12 @@ const options: swaggerJsdoc.Options = {
       description:
         "REST API for FlowPilot task management. All responses use a uniform envelope: `{ success, message, data, errors? }`.",
     },
-    servers: [{ url: `http://localhost:${env.PORT}/api`, description: "Development" }],
+    servers: [
+      {
+        url: `${env.API_BASE_URL}/api`,
+        description: env.NODE_ENV === "production" ? "Production" : "Development",
+      },
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -139,7 +152,7 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  apis: ["./src/routes/*.ts"],
+  apis: [routeGlob("ts"), routeGlob("js")],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
