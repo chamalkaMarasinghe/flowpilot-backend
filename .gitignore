@@ -6,4 +6,3 @@ dist/
 api/*.js
 api/*.d.ts
 api/*.map
-# Ignore all files in the api directory except for the index.js file..
